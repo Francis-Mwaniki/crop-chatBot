@@ -27,16 +27,17 @@ const data = await req.json();
 const parsedObject = JSON.parse(data.prompt);
 
 console.log(parsedObject);
-const {crop, region} = parsedObject;
+// PH, rainfall, temperature, soilType, soilFertility, humidity, altitude, sunlight, region  
+const { PH , rainfall, temperature, soilType, soilFertility, humidity, altitude, sunlight, region } = parsedObject;
 
- if(!crop || !region){
+ if(!region || !soilType || !soilFertility || !humidity || !altitude || !sunlight || !temperature || !rainfall || !PH){
     return NextResponse.json("Please provide a valid crop and region", {
         status: 400,
         });
     }
     
 
-    const instructions = cropInstruction({ crop: crop, region: region });
+    const instructions = cropInstruction({ PH, rainfall, temperature, soilType, soilFertility, humidity, altitude, sunlight, region  });
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
