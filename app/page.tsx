@@ -3,7 +3,7 @@
 
 import { SetStateAction, useEffect, useRef, useState } from 'react';
 import { useCompletion, useChat } from "ai/react";
-import { CopyCheckIcon, CopyIcon, Loader2, RefreshCcw, Trash, Trash2 } from "lucide-react"
+import { ArrowUpIcon, CopyCheckIcon, CopyIcon, Loader2, RefreshCcw, Trash, Trash2 } from "lucide-react"
 import Head from 'next/head';
 import { Card, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@radix-ui/react-tooltip';
 interface Props {
   userAddedCrops: string[
   ];
@@ -408,13 +409,13 @@ export default function Home() {
         <meta name="description" content="Crop Advisory App using Next.js and Tailwind CSS" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section>
+      <section className='mb-16'>
         <h1 className="text-4xl font-bold text-center mt-8">Crop Advisory App</h1>
-        <p className="text-center mt-4">Get advisory for your crops</p>
+        <p className="text-center mt-4">
+          Get better advisory for your crops
+        </p>
         {/* Nav */}
         <nav className="flex justify-center items-center mt-8">
-          <a href="#advisory" className=" bg-black px-2 py-1 rounded-md text-white  hover:bg-slate-900 transition-all">Home</a>
-          <a href="#about" className=" bg-black px-2 py-1 rounded-md text-white  hover:bg-slate-900 transition-all ml-4">About</a>
           <a 
           onClick={() => setShowExample(!showExample)}
           href="#contact" className=" bg-black px-2 py-1 rounded-md text-white  hover:bg-slate-900 transition-all ml-4">Example 
@@ -719,23 +720,29 @@ export default function Home() {
 
 {
   isLoading && (
-    <div className="text-center flex flex-col items-center">
-      <p>Generating advisory...</p>
-      <img src="/load.gif" alt="loader" className="w-10 h-10" />
+    <div className="text-center mt-52  fixed inset-0 z-30 bg-transparent
+     opacity-80 flex flex-col items-center
+      backdrop-filter backdrop-blur-lg
+
+     ">
+      <div className='  text-3xl p-5'>
+        Analyzing your data to generate an advisory
+      </div>
+      <img src="/load.gif" alt="loader" className="w-40 h-40" />
     </div>
   )
 }
 
 {
   completion && (
-    <div ref={clearRef as React.RefObject<HTMLDivElement>} >
+    <div ref={clearRef as React.RefObject<HTMLDivElement>} className={`${isLoading ? 'hidden' : 'block'}`}>
      <Card 
     ref={(ref) => (messagesRef.current = ref as HTMLDivElement)}
      className='p-4 flex flex-col items-center m-5
-      bg-white sm:max-w-2xl w-full rounded-md shadow-md
+      bg-transparent border-none sm:max-w-2xl w-full shadow-transparent
       overflow-hidden
-      ' style={{ maxHeight: '500px', overflowY: 'auto', border: '1px solid #ccc', borderRadius:10 }}>
-      <h2 className="text-center">Advisory for {crop} in {region}</h2>
+      ' style={{ maxHeight: '500px', overflowY: 'auto' }}>
+      <h2 className="text-center">Crop Analysis </h2>
       <span
        ref={(ref) => (messagesRef.current = ref as HTMLDivElement)}
       >
@@ -825,6 +832,39 @@ export default function Home() {
 
 
       
+      <footer className="flex flex-row justify-between fixed bottom-0 inset-x-0 z-20 bg-white opacity-100 items-center  mt-8">
+      <div className="flex flex-col justify-center items-center">
+        </div>
+       <div className="flex flex-col justify-center items-center">
+       <p className="text-center">Crop Advisory App</p>
+       
+        <p className="text-center">© {new Date().getFullYear()}</p>
+        </div>
+        <div
+        onClick={() => {
+          window.scrollTo(0, 0);
+        }
+        }
+         className=' mr-4 rounded-full bg-black text-white p-2'>
+        <TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger>
+    <ArrowUpIcon className="w-8 h-8" />
+    </TooltipTrigger>
+    <TooltipContent>
+      <p>
+       Scroll to top 
+      </p>
+    </TooltipContent>
+  </Tooltip>
+</TooltipProvider>
+
+
+
+        </div>
+        
+        
+      </footer>
     </div>
   );
 }
