@@ -3,10 +3,11 @@ import { OpenAIApi, Configuration } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { NextResponse } from "next/server";
 import {cropInstruction} from "../../../lib/instruction"
-
+// import dotenv from "dotenv";
+// dotenv.config();
 // /api/completion
 const config = new Configuration({
-  apiKey: "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"
+  apiKey: process.env.OPENAI_API_KEY,
 });
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';

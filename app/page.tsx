@@ -1,6 +1,5 @@
 "use client";
 // pages/index.tsx
-
 import { SetStateAction, useEffect, useRef, useState } from 'react';
 import { useCompletion, useChat } from "ai/react";
 import { ArrowUpIcon, CopyCheckIcon, CopyIcon, Loader2, RefreshCcw, Trash, Trash2 } from "lucide-react"
