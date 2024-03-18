@@ -5,6 +5,8 @@ import { SetStateAction, useEffect, useRef, useState } from 'react';
 import { useCompletion, useChat } from "ai/react";
 import { ArrowUpIcon, CopyCheckIcon, CopyIcon, Loader2, RefreshCcw, Trash, Trash2 } from "lucide-react"
 import Head from 'next/head';
+import { useUser } from '@clerk/nextjs';
+import { UserButton } from "@clerk/nextjs";
 import { Card, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -173,6 +175,7 @@ export default function Home() {
   const [humidity, setHumidity] = useState<string>('');
   const [altitude, setAltitude] = useState<string>('');
   const [sunlight, setSunlight] = useState<string>('');
+  const user = useUser();
 
   // const [wind, setWind] = useState<string>('');
   // const [pests, setPests] = useState<string>('');
@@ -409,11 +412,21 @@ export default function Home() {
         <meta name="description" content="Crop Advisory App using Next.js and Tailwind CSS" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {/* Card userButton and Welcome User */}
+     {
+      user && (<>
+       <Card className="p-4 flex flex-row justify-between items-center m-5 max-w-md w-full rounded-md shadow-md">
+        <UserButton />
+        <p className="text-center">Welcome {user.user?.firstName}</p>
+      </Card>
+      </>)
+     }
+      {/* Card */}
       <section className='mb-16'>
-        <h1 className="text-4xl font-bold text-center mt-8">Crop Advisory App</h1>
+        {/* <h1 className="text-4xl font-bold text-center mt-8">Crop Advisory App</h1>
         <p className="text-center mt-4">
           Get better advisory for your crops
-        </p>
+        </p> */}
         {/* Nav */}
         <nav className="flex justify-center items-center mt-8">
           <a 

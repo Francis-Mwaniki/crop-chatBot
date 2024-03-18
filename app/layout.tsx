@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter,JetBrains_Mono,Quicksand,Josefin_Sans } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from '@clerk/nextjs'
 
 const inter = Inter({ subsets: ["latin"] });
 const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"] });
@@ -18,9 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <ClerkProvider>
+          <html lang="en">
       <body className={josefinSans.className}
       >{children}</body>
     </html>
+    </ClerkProvider>
+
   );
 }
