@@ -27,22 +27,19 @@ interface CropInstruction {
     sunlight: number;
     region: string;
   }
-const cropInstruction = ({ PH, rainfall, temperature, soilType, soilFertility, humidity, altitude, sunlight, region  }: conditions): CropInstruction => {
+const cropInstruction = ({ PH, rainfall, temperature, soilType, soilFertility, humidity, altitude, sunlight, region  }: conditions) => {
     // Sample instructions this  conditios PH, rainfall, temperature, soilType, soilFertility, humidity, altitude, sunlight, region  
     const instructions = {
       GeneralInstructions: `WITHOUT DEVIATING, Assume the role as an advisor for a farmer growing ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} `,
-      crop:  `Predict the best crop to grow in ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} `,
-      region: `The best region to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} `,
-      duration: `The best duration to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} `,
-      bestConditions: `The best conditions to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} `,
-      bestTimeToPlant: `The best time to plant ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} `,
-      additionalTips: `Additional tips to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} `,
-      fertilization: `The best fertilization to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH} `,
-      pestManagement: `The best pest management to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH}`,
-      diseasePrevention: `The best disease prevention to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH}`,
-      harvesting: `The best harvesting method to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH}`,
-      storage: `The best storage method to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH}`,
-      marketOpportunities: `The best market opportunities to grow ${region} ${soilType} ${soilFertility} ${humidity} ${altitude} ${sunlight} ${temperature} ${rainfall} ${PH}`, 
+      note:`
+       Based on the conditions, provide the best advice to the farmer,
+       market opportunities, best time to plant, fertilization, pest management, disease prevention, harvesting, storage, and additional tips.
+      `,
+      IMPORTANT:`
+       If no advice is given, please provide do not hesitate to provide the best advice to the farmer.
+      `
+   
+      
     };
   
     return instructions;

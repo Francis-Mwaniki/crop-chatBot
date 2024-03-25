@@ -1,62 +1,68 @@
-// pages/api/generateReport.js
-import { OpenAIApi, Configuration } from "openai-edge";
-import { OpenAIStream, StreamingTextResponse } from "ai";
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAIStream, StreamingTextResponse } from 'ai';
+import { cropInstruction } from "../../../lib/instruction"; // Assuming this function remains unchanged
 import { NextResponse } from "next/server";
-import {cropInstruction} from "../../../lib/instruction"
-// import dotenv from "dotenv";
-// dotenv.config();
-// /api/completion
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const apikey="AIzaSyCUP6NgFTLHkSwit4HK-nuE4Uq4NdzSp7U"
+const genAI = new GoogleGenerativeAI( apikey || '');
+ 
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
-
-const openai = new OpenAIApi(config);
-
+ 
 export async function POST(req: Request) {
+  // Extract the `prompt` from the body of the request
+  const data = await req.json();
+  const parsedObject = JSON.parse(data.prompt);
 
-// const cropAndRegion = await req.json()
+  const {
+    PH,
+    rainfall,
+    temperature,
+    soilType,
+    soilFertility,
+    humidity,
+    altitude,
+    sunlight,
+    region
+  } = parsedObject;
 
-// console.log(cropAndRegion);
-
-
-/* { prompt: '{"crop":"Maize","region":"Nakuru"}' } */
-const data = await req.json();
-
-// Parsing the string within the object into an object
-const parsedObject = JSON.parse(data.prompt);
-
-console.log(parsedObject);
-// PH, rainfall, temperature, soilType, soilFertility, humidity, altitude, sunlight, region  
-const { PH , rainfall, temperature, soilType, soilFertility, humidity, altitude, sunlight, region } = parsedObject;
-
- if(!region || !soilType || !soilFertility || !humidity || !altitude || !sunlight || !temperature || !rainfall || !PH){
+  console.log("Data", parsedObject);
+  
+  if (!region || !soilType || !soilFertility || !humidity || !altitude || !sunlight || !temperature || !rainfall || !PH) {
     return NextResponse.json("Please provide a valid crop and region", {
-        status: 400,
-        });
-    }
-    
+      status: 400,
+    });
+  }
 
-    const instructions = cropInstruction({ PH, rainfall, temperature, soilType, soilFertility, humidity, altitude, sunlight, region  });
-  const response = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: [
-      {
-        role: "system",
-        content:  JSON.stringify(instructions)
-      },
-      {
-        role: "user",
-        content: `
-        ${instructions.GeneralInstructions}
-        `
-      },
-    ],
-    stream: true,
+  const instructions = cropInstruction({
+    PH,
+    rainfall,
+    temperature,
+    soilType,
+    soilFertility,
+    humidity,
+    altitude,
+    sunlight,
+    region
   });
-  const stream = OpenAIStream(response);
+
+  const prompt = instructions.GeneralInstructions;
+  const part_of_instructions = JSON.stringify(instructions);
+ 
+  // Ask Google Generative AI for a streaming completion given the prompt
+  const response = await genAI
+    .getGenerativeModel({ model: 'gemini-pro' })
+    .generateContentStream({
+      contents: [{ role: 'user', parts:[{ text: part_of_instructions
+      },
+        
+      ],
+      
+     }],
+    });
+ 
+  // Convert the response into a friendly text-stream
+  const stream = GoogleGenerativeAIStream(response);
+ 
+  // Respond with the stream
   return new StreamingTextResponse(stream);
 }
-
-         
